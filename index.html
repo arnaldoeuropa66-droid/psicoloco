@@ -17,7 +17,7 @@
 <script src="https://js.puter.com/v2/" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
 
-<link rel="manifest" href="/manifest.json?v=10">
+<link rel="manifest" href="/manifest.json?v=11">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192-v4.png">
 <link rel="icon" type="image/png" sizes="512x512" href="/icon-512-v4.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-v4.png">
@@ -38,6 +38,8 @@
     --error: #C0392B;
     --crisis: #B23A48;
     --crisis-soft: #F4E5E6;
+    --active: #7A5C9E;
+    --active-soft: #F0EBF7;
     --bubble-user: #4A5D4E;
     --bubble-ai: #F5F1EA;
     --shadow-sm: 0 1px 3px rgba(31,27,22,0.06);
@@ -82,7 +84,6 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  /* ── SPLASH ─────────────────────────────────── */
   #splash {
     position: fixed; inset: 0; z-index: 100;
     background: var(--cream);
@@ -349,7 +350,6 @@
     cursor: pointer;
   }
 
-  /* ── CHAT HEADER ─────────────────────────────── */
   #chat-wrapper {
     display: none;
     flex-direction: column;
@@ -418,6 +418,11 @@
     margin-left: 4px;
   }
   .mode-badge:hover { background: rgba(74,93,78,0.18); }
+  .mode-badge.active-mode {
+    background: rgba(122,92,158,0.15);
+    color: var(--active);
+  }
+  .mode-badge.active-mode:hover { background: rgba(122,92,158,0.25); }
 
   .header-actions { display: flex; gap: 6px; flex-shrink: 0; }
   .icon-btn {
@@ -503,7 +508,6 @@
     font-weight: 400;
   }
 
-  /* ── CHAT AREA ───────────────────────────────── */
   #chat-area {
     flex: 1;
     overflow-y: auto;
@@ -620,7 +624,6 @@
     opacity: 0.4;
   }
 
-  /* Crisis cards */
   .crisis-card {
     border-radius: var(--radius);
     padding: 16px 20px;
@@ -757,7 +760,6 @@
     40% { transform: scale(1); opacity: 1; }
   }
 
-  /* ── INPUT BAR ───────────────────────────────── */
   #input-bar {
     background: var(--warm-white);
     border-top: 1px solid var(--soft);
@@ -840,7 +842,6 @@
     50% { box-shadow: 0 0 0 10px rgba(201,123,90,0); }
   }
 
-  /* ── MODALES ────────────────────────────────── */
   .modal-overlay {
     position: fixed; inset: 0; z-index: 50;
     background: rgba(31,27,22,0.55);
@@ -915,7 +916,12 @@
     background: var(--sage);
     color: var(--cream);
   }
-  .setting-chip:hover:not(.active) { border-color: var(--sage-light); }
+  .setting-chip.active-active {
+    border-color: var(--active);
+    background: var(--active);
+    color: var(--cream);
+  }
+  .setting-chip:hover:not(.active):not(.active-active) { border-color: var(--sage-light); }
   .setting-hint {
     font-size: 12px;
     color: var(--muted);
@@ -956,6 +962,11 @@
     background: rgba(74,93,78,0.05);
     box-shadow: 0 4px 20px rgba(74,93,78,0.15);
   }
+  .mode-card.selected.mode-active {
+    border-color: var(--active);
+    background: var(--active-soft);
+    box-shadow: 0 4px 20px rgba(122,92,158,0.15);
+  }
   .mode-card .m-icon {
     font-size: 26px;
     flex-shrink: 0;
@@ -972,6 +983,9 @@
     background: var(--warm-white);
     border-color: var(--sage);
   }
+  .mode-card.selected.mode-active .m-icon {
+    border-color: var(--active);
+  }
   .mode-card .m-info { flex: 1; min-width: 0; }
   .mode-card .m-name {
     font-family: 'Fraunces', Georgia, serif;
@@ -980,6 +994,9 @@
     color: var(--sage);
     margin-bottom: 4px;
     letter-spacing: -0.01em;
+  }
+  .mode-card.mode-active .m-name {
+    color: var(--active);
   }
   .mode-card .m-desc {
     font-size: 13px;
@@ -1503,7 +1520,6 @@
   <div class="loading-text" id="loading-text">Conectando...</div>
 </div>
 
-<!-- SPLASH — 3 pasos -->
 <div id="splash">
 
   <div class="splash-step active" data-step="1">
@@ -1587,7 +1603,6 @@
 
 </div>
 
-<!-- APP -->
 <div id="chat-wrapper">
 
   <div id="install-banner" role="region" aria-label="Instalar aplicación">
@@ -1683,7 +1698,6 @@
   </div>
 </div>
 
-<!-- MODE MODAL -->
 <div class="modal-overlay" id="mode-modal" onclick="closeOnOverlay(event,'mode-modal')">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -1711,11 +1725,17 @@
           <div class="m-desc">Quiero ejercicios concretos, pasos y técnicas para hoy mismo.</div>
         </div>
       </button>
+      <button class="mode-card mode-active" data-mode="active" type="button">
+        <div class="m-icon">🎯</div>
+        <div class="m-info">
+          <div class="m-name">Enfoque activo</div>
+          <div class="m-desc">Quiero un plan concreto, pasos y tareas para avanzar de verdad.</div>
+        </div>
+      </button>
     </div>
   </div>
 </div>
 
-<!-- MOOD MODAL -->
 <div class="modal-overlay" id="mood-modal" onclick="closeOnOverlay(event,'mood-modal')">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -1742,7 +1762,6 @@
   </div>
 </div>
 
-<!-- EXERCISES MODAL -->
 <div class="modal-overlay" id="exercises-modal" onclick="closeOnOverlay(event,'exercises-modal')">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -1772,7 +1791,6 @@
   </div>
 </div>
 
-<!-- EXERCISE PLAYER -->
 <div id="exercise-player">
   <button class="ex-close" onclick="stopExercise()" aria-label="Cerrar">×</button>
   <div class="ex-title" id="ex-player-title">Respiración</div>
@@ -1783,7 +1801,6 @@
   </div>
 </div>
 
-<!-- SUMMARY MODAL -->
 <div class="modal-overlay" id="summary-modal" onclick="closeOnOverlay(event,'summary-modal')">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -1794,7 +1811,6 @@
   </div>
 </div>
 
-<!-- HELP MODAL -->
 <div class="modal-overlay" id="help-modal" onclick="closeOnOverlay(event,'help-modal')">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -1810,7 +1826,6 @@
   </div>
 </div>
 
-<!-- SETTINGS MODAL -->
 <div class="modal-overlay" id="settings-modal" onclick="closeOnOverlay(event,'settings-modal')">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -1835,6 +1850,7 @@
         <button class="setting-chip" id="chip-mode-listen" onclick="setMode('listen')"><span id="chip-mode-listen-lbl">Solo escucha</span></button>
         <button class="setting-chip" id="chip-mode-companion" onclick="setMode('companion')"><span id="chip-mode-companion-lbl">Acompañamiento</span></button>
         <button class="setting-chip" id="chip-mode-practical" onclick="setMode('practical')"><span id="chip-mode-practical-lbl">Ayuda práctica</span></button>
+        <button class="setting-chip" id="chip-mode-active" onclick="setMode('active')"><span id="chip-mode-active-lbl">Enfoque activo</span></button>
       </div>
       <div class="setting-hint" id="mode-hint">Cambia cómo te responde según lo que necesites hoy.</div>
     </div>
@@ -1909,12 +1925,13 @@ const MODELS = [
   { id: 'claude-3-5-haiku', label: 'Claude 3.5 Haiku', tag: 'Alt.' },
 ];
 
-const STORAGE_KEY = 'menteclara_state_v6';
+const STORAGE_KEY = 'menteclara_state_v7';
 
 const MODE_META = {
   listen:    { icon: '👂', es: 'Solo escucha',    en: 'Listen only' },
   companion: { icon: '🌿', es: 'Acompañamiento',  en: 'Companionship' },
-  practical: { icon: '🧭', es: 'Ayuda práctica',  en: 'Practical help' }
+  practical: { icon: '🧭', es: 'Ayuda práctica',  en: 'Practical help' },
+  active:    { icon: '🎯', es: 'Enfoque activo',  en: 'Active approach' }
 };
 
 const state = {
@@ -1968,11 +1985,13 @@ const TEXTS = {
     modeListen: 'Solo escucha',
     modeCompanion: 'Acompañamiento',
     modePractical: 'Ayuda práctica',
+    modeActive: 'Enfoque activo',
     modeTitle: '¿Qué necesitas hoy?',
     modeSubtitle: 'Elige cómo quieres que te acompañe. Puedes cambiarlo cuando quieras.',
     modeListenDesc: 'Quiero desahogarme. Que me escuche y me valide, sin consejos.',
     modeCompanionDesc: 'Quiero que me escuche, me ayude a entender lo que siento y me proponga cosas.',
     modePracticalDesc: 'Quiero ejercicios concretos, pasos y técnicas para hoy mismo.',
+    modeActiveDesc: 'Quiero un plan concreto, pasos y tareas para avanzar de verdad.',
     modeChanged: (m) => `Modo cambiado a ${m}`,
     modelLbl: 'Modelo de IA',
     modelHint: 'Los modelos gratuitos pueden tener límites de uso.',
@@ -2019,6 +2038,7 @@ const TEXTS = {
     welcomeListen: (n, c) => `Hola ${n}. Soy ${c}. Estoy aquí para escucharte. Cuéntame lo que necesites, sin prisa. No voy a darte consejos si no los pides.`,
     welcomeCompanion: (n, c) => `Hola ${n}. Soy ${c}. Estoy aquí para acompañarte: te escucho, te ayudo a entender lo que sientes, y si quieres te propongo cosas. ¿Cómo estás hoy?`,
     welcomePractical: (n, c) => `Hola ${n}. Soy ${c}. Estoy aquí para darte herramientas concretas. Cuéntame qué te pasa y te propongo algo que puedas usar hoy mismo.`,
+    welcomeActive: (n, c) => `Hola ${n}. Soy ${c}. Vamos a trabajar juntos en algo concreto. Cuéntame qué te está costando ahora y te propongo un plan con pasos claros para esta semana. ¿Por dónde empezamos?`,
     welcomeBack: (n, s, c) => `Hola de nuevo, ${n}. Soy ${c}. La última vez hablamos de: "${s}". ¿Cómo te has sentido desde entonces?`,
     modelChanged: (m) => `Modelo cambiado a ${m}`,
     companionChanged: (name) => `Ahora hablas con ${name}`,
@@ -2097,11 +2117,13 @@ const TEXTS = {
     modeListen: 'Listen only',
     modeCompanion: 'Companionship',
     modePractical: 'Practical help',
+    modeActive: 'Active approach',
     modeTitle: 'What do you need today?',
     modeSubtitle: 'Choose how you want to be accompanied. You can change it anytime.',
     modeListenDesc: 'I want to vent. Listen and validate, no advice.',
     modeCompanionDesc: 'I want you to listen, help me understand what I feel and suggest things.',
     modePracticalDesc: 'I want concrete exercises, steps and techniques for today.',
+    modeActiveDesc: 'I want a concrete plan, steps and tasks to actually move forward.',
     modeChanged: (m) => `Mode changed to ${m}`,
     modelLbl: 'AI Model',
     modelHint: 'Free models may have usage limits.',
@@ -2148,6 +2170,7 @@ const TEXTS = {
     welcomeListen: (n, c) => `Hi ${n}. I'm ${c}. I'm here to listen. Tell me whatever you need, no rush. I won't give advice unless you ask.`,
     welcomeCompanion: (n, c) => `Hi ${n}. I'm ${c}. I'm here to accompany you: I listen, help you understand what you feel, and if you want I suggest things. How are you today?`,
     welcomePractical: (n, c) => `Hi ${n}. I'm ${c}. I'm here to give you concrete tools. Tell me what's going on and I'll suggest something you can use today.`,
+    welcomeActive: (n, c) => `Hi ${n}. I'm ${c}. Let's work on something concrete together. Tell me what's hard right now and I'll suggest a plan with clear steps for this week. Where do we start?`,
     welcomeBack: (n, s, c) => `Hi again, ${n}. I'm ${c}. Last time we talked about: "${s}". How have you been since?`,
     modelChanged: (m) => `Model changed to ${m}`,
     companionChanged: (name) => `Now talking with ${name}`,
@@ -2225,6 +2248,7 @@ function getModeName(mode) {
   const m = mode || state.therapyMode;
   if (m === 'listen') return TEXTS[state.lang].modeListen;
   if (m === 'practical') return TEXTS[state.lang].modePractical;
+  if (m === 'active') return TEXTS[state.lang].modeActive;
   return TEXTS[state.lang].modeCompanion;
 }
 function getModeIcon(mode) {
@@ -2326,6 +2350,66 @@ Your job:
 - If the user rambles, gently redirect to something actionable.
 Structure: brief validation + concrete suggestion + step by step.
 Max 6 sentences.`;
+  }
+
+  if (mode === 'active') {
+    return isEs ? `
+MODO ACTIVO: ENFOQUE ACTIVO
+El usuario quiere un plan concreto con pasos y tareas. Esto es prioritario sobre cualquier otra instrucción.
+Tu trabajo es ser un acompañante orientado a la acción. NO eres un espejo. NO eres un simple validador. Eres alguien que ayuda a AVANZAR.
+
+ESTRUCTURA OBLIGATORIA DE CADA RESPUESTA:
+1. VALIDACIÓN BREVE (1 frase): reconoce lo que siente sin extenderse.
+2. DIAGNÓSTICO SUAVE (1-2 frases): nombra lo que ves. "Lo que cuentas suena a X" o "parece que aquí hay Y".
+3. PROPUESTA CONCRETA (obligatoria, 2-3 frases): propón al menos UNA acción específica. No vale "intenta relajarte". Debe ser algo concreto: "hoy escribe esto", "esta semana prueba esto", "cuando notes X, haz Y".
+4. PASO PEQUEÑO (1 frase): ofrece un paso mínimo para HOY, no para la semana que viene. Algo que pueda hacer en menos de 10 minutos.
+5. PREGUNTA DE COMPROMISO (1 frase): "¿Te parece que probemos esto?" o "¿Puedes comprometerte con esto hasta mañana?".
+
+REGLAS ESPECÍFICAS:
+- NO te quedes solo en preguntas. Después de preguntar, PROPÓN.
+- Si el usuario dice "no puedo", "no sé", "es difícil":
+  * NO aceptes la primera negativa.
+  * Insiste con amabilidad UNA vez: divide la tarea en algo más pequeño.
+  * Si sigue negándose, respeta y pasa a explorar qué le bloquea.
+- Cada 2-3 turnos, propón una TAREA para llevar a cabo entre ahora y la próxima conversación.
+- Al final de cada respuesta, si has propuesto una tarea, recuérdasela: "Recuerda: [tarea]".
+- Máximo 8 frases. Si te pasas, la gente se pierde.
+
+EJEMPLO DE RESPUESTA IDEAL:
+Usuario: "Estoy agobiado con el trabajo, no puedo más."
+Tú: "Suena a que llevas mucho tiempo aguantando sin válvula de escape. Por lo que cuentas, parece que hay agotamiento acumulado, no solo cansancio puntual. Te propongo algo concreto para empezar: esta tarde, cuando salgas del trabajo, escribe en 3 líneas qué es lo que más te ha sobrepasado hoy. No lo analices, solo escríbelo. Y una cosa más pequeña para hoy mismo: antes de dormir, durante 5 minutos, haz respiración 4-7-8. ¿Te parece que probemos estas dos cosas hasta mañana y me cuentas?"
+
+NO des consejos genéricos ("deberías descansar más", "tienes que cuidarte"). Propón algo específico y accionable.
+NO diagnostiques. Eres acompañante activo, no clínico.
+Habla en español natural, adulto, directo, cálido.` : `
+ACTIVE MODE: ACTIVE APPROACH
+The user wants a concrete plan with steps and tasks. This is a priority over any other instruction.
+Your job is to be an action-oriented companion. You are NOT a mirror. You are NOT a mere validator. You are someone who helps MOVE FORWARD.
+
+MANDATORY STRUCTURE OF EACH RESPONSE:
+1. BRIEF VALIDATION (1 sentence): acknowledge what they feel without extending.
+2. SOFT DIAGNOSIS (1-2 sentences): name what you see. "What you describe sounds like X" or "there seems to be Y here".
+3. CONCRETE PROPOSAL (mandatory, 2-3 sentences): suggest at least ONE specific action. Not "try to relax". It must be concrete: "today write this", "this week try this", "when you notice X, do Y".
+4. SMALL STEP (1 sentence): offer a minimum step for TODAY, not for next week. Something doable in less than 10 minutes.
+5. COMMITMENT QUESTION (1 sentence): "Shall we try this?" or "Can you commit to this until tomorrow?".
+
+SPECIFIC RULES:
+- Do NOT stay only in questions. After asking, SUGGEST.
+- If the user says "I can't", "I don't know", "it's hard":
+  * Do NOT accept the first no.
+  * Insist gently ONCE: break the task into something smaller.
+  * If they still refuse, respect it and explore what blocks them.
+- Every 2-3 turns, suggest a TASK to do between now and the next conversation.
+- At the end of each response, if you suggested a task, remind them: "Remember: [task]".
+- Max 8 sentences. If you go over, people get lost.
+
+IDEAL RESPONSE EXAMPLE:
+User: "I'm overwhelmed with work, I can't take it anymore."
+You: "It sounds like you've been holding on for a long time without a release valve. From what you're saying, it looks like accumulated exhaustion, not just punctual tiredness. Let me suggest something concrete to start: this afternoon, when you leave work, write 3 lines about what overwhelmed you most today. Don't analyze it, just write it. And one smaller thing for today: before bed, for 5 minutes, do 4-7-8 breathing. Shall we try these two things until tomorrow and you tell me?"
+
+Don't give generic advice ("you should rest more"). Suggest something specific and actionable.
+Don't diagnose. You are an active companion, not a clinician.
+Speak naturally, as an adult, direct, warm.`;
   }
 
   return isEs ? `
@@ -2657,6 +2741,7 @@ function updateModeBadge() {
   if (!badge || !icon || !text) return;
   icon.textContent = getModeIcon();
   text.textContent = getModeName();
+  badge.classList.toggle('active-mode', state.therapyMode === 'active');
 }
 
 function nextStep(n) {
@@ -2721,6 +2806,9 @@ function openMode() {
     } else if (mode === 'practical') {
       c.querySelector('.m-name').textContent = t.modePractical;
       c.querySelector('.m-desc').textContent = t.modePracticalDesc;
+    } else if (mode === 'active') {
+      c.querySelector('.m-name').textContent = t.modeActive;
+      c.querySelector('.m-desc').textContent = t.modeActiveDesc;
     }
   });
   document.getElementById('mode-modal').classList.add('open');
@@ -2801,6 +2889,8 @@ function sendWelcome() {
     msg = TEXTS[state.lang].welcomeListen(state.userName, companionName);
   } else if (state.therapyMode === 'practical') {
     msg = TEXTS[state.lang].welcomePractical(state.userName, companionName);
+  } else if (state.therapyMode === 'active') {
+    msg = TEXTS[state.lang].welcomeActive(state.userName, companionName);
   } else {
     msg = TEXTS[state.lang].welcomeCompanion(state.userName, companionName);
   }
@@ -2959,7 +3049,7 @@ async function callAI(userText) {
     { role: 'user', content: userText }
   ];
   const timeoutPromise = new Promise((_, reject) => {
-    setTimeout(() => reject(new Error('TIMEOUT')), 30000);
+    setTimeout(() => reject(new Error('TIMEOUT')), 40000);
   });
   const aiPromise = puter.ai.chat(messages, { model: state.model });
   const response = await Promise.race([aiPromise, timeoutPromise]);
@@ -3267,6 +3357,8 @@ async function newConversation() {
       welcome = TEXTS[state.lang].welcomeListen(state.userName, companionName);
     } else if (state.therapyMode === 'practical') {
       welcome = TEXTS[state.lang].welcomePractical(state.userName, companionName);
+    } else if (state.therapyMode === 'active') {
+      welcome = TEXTS[state.lang].welcomeActive(state.userName, companionName);
     } else {
       welcome = TEXTS[state.lang].welcomeCompanion(state.userName, companionName);
     }
@@ -3525,6 +3617,11 @@ function updateSettingsChips() {
   setChip('chip-mode-listen', state.therapyMode === 'listen');
   setChip('chip-mode-companion', state.therapyMode === 'companion');
   setChip('chip-mode-practical', state.therapyMode === 'practical');
+  // Enfoque activo: chip con color propio
+  const activeChip = document.getElementById('chip-mode-active');
+  if (activeChip) {
+    activeChip.className = 'setting-chip' + (state.therapyMode === 'active' ? ' active-active' : '');
+  }
   const speedId = state.speed === 0.85 ? 'chip-slow' : state.speed === 1.2 ? 'chip-fast' : 'chip-normal';
   ['chip-slow','chip-normal','chip-fast'].forEach(id => setChip(id, id === speedId));
   document.querySelectorAll('#model-options .setting-chip').forEach((el, i) => {
@@ -3580,6 +3677,7 @@ function applyLang() {
   document.getElementById('chip-mode-listen-lbl').textContent = t.modeListen;
   document.getElementById('chip-mode-companion-lbl').textContent = t.modeCompanion;
   document.getElementById('chip-mode-practical-lbl').textContent = t.modePractical;
+  document.getElementById('chip-mode-active-lbl').textContent = t.modeActive;
   document.getElementById('s-model-lbl').textContent = t.modelLbl;
   document.getElementById('model-hint').textContent = t.modelHint;
   document.getElementById('s-lang-lbl').textContent = t.langLbl;
