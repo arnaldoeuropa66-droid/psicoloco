@@ -17,7 +17,7 @@
 <script src="https://js.puter.com/v2/" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
 
-<link rel="manifest" href="/manifest.json?v=9">
+<link rel="manifest" href="/manifest.json?v=10">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192-v4.png">
 <link rel="icon" type="image/png" sizes="512x512" href="/icon-512-v4.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-v4.png">
@@ -37,6 +37,7 @@
     --soft: #E8E2D8;
     --error: #C0392B;
     --crisis: #B23A48;
+    --crisis-soft: #F4E5E6;
     --bubble-user: #4A5D4E;
     --bubble-ai: #F5F1EA;
     --shadow-sm: 0 1px 3px rgba(31,27,22,0.06);
@@ -619,6 +620,7 @@
     opacity: 0.4;
   }
 
+  /* Crisis cards */
   .crisis-card {
     border-radius: var(--radius);
     padding: 16px 20px;
@@ -638,25 +640,97 @@
     border-left: 3px solid var(--crisis);
     color: var(--charcoal);
   }
-
-  .listening-badge {
+  .crisis-card.high {
+    background: var(--crisis-soft);
+    border: 1px solid rgba(178,58,72,0.2);
+    border-left: 3px solid var(--crisis);
+    color: var(--charcoal);
+    padding: 18px 20px;
+  }
+  .crisis-card.high h4 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    font-style: italic;
+    color: var(--crisis);
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
     display: flex;
     align-items: center;
-    gap: 10px;
-    background: var(--sage);
-    color: var(--cream);
-    padding: 10px 18px;
-    border-radius: var(--radius-full);
-    font-size: 13px;
-    font-weight: 500;
-    align-self: center;
-    margin: 4px 0;
+    gap: 8px;
   }
-  .listening-badge .dot {
-    width: 8px; height: 8px;
-    background: var(--cream);
-    border-radius: 50%;
-    animation: pulse 1s infinite;
+  .crisis-card.high p {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    color: var(--charcoal);
+  }
+  .crisis-card.high .crisis-lines-mini {
+    background: var(--warm-white);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+  .crisis-card.high .crisis-lines-mini p {
+    margin: 0 0 4px;
+    font-size: 13.5px;
+  }
+  .crisis-card.high .crisis-lines-mini p:last-child {
+    margin-bottom: 0;
+  }
+  .crisis-card.high .crisis-lines-mini strong {
+    color: var(--crisis);
+    font-weight: 600;
+  }
+  .crisis-card.high .crisis-actions-mini {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .crisis-card.high .crisis-actions-mini a,
+  .crisis-card.high .crisis-actions-mini button {
+    flex: 1;
+    min-width: 140px;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: none;
+  }
+  .crisis-card.high .crisis-actions-mini .call {
+    background: var(--crisis);
+    color: white;
+  }
+  .crisis-card.high .crisis-actions-mini .call:hover {
+    background: #8E2D39;
+  }
+  .crisis-card.high .crisis-actions-mini .more {
+    background: transparent;
+    color: var(--crisis);
+    border: 1.5px solid var(--crisis);
+  }
+  .crisis-card.high .crisis-actions-mini .more:hover {
+    background: rgba(178,58,72,0.08);
+  }
+  .crisis-card.high .crisis-footer {
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.5;
+    text-align: center;
   }
 
   .typing-bubble {
@@ -850,7 +924,6 @@
     font-weight: 400;
   }
 
-  /* Mode cards */
   .mode-list {
     display: flex;
     flex-direction: column;
@@ -986,7 +1059,6 @@
     border-color: var(--error);
   }
 
-  /* ── MOOD ───────────────────────────────────── */
   .mood-emojis {
     display: flex;
     justify-content: space-between;
@@ -1081,7 +1153,6 @@
   }
   .mood-bar .bar-emoji { font-size: 18px; }
 
-  /* ── EXERCISES ──────────────────────────────── */
   .exercise-card {
     background: var(--warm-white);
     border: 1.5px solid var(--soft);
@@ -1223,94 +1294,6 @@
     border: 1.5px solid var(--soft);
   }
 
-  /* ── CRISIS ─────────────────────────────────── */
-  #crisis-modal {
-    position: fixed; inset: 0; z-index: 200;
-    background: rgba(31,27,22,0.85);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  #crisis-modal.open { display: flex; }
-  .crisis-sheet {
-    background: var(--cream);
-    border-radius: var(--radius-lg);
-    padding: 32px 24px;
-    max-width: 440px;
-    width: 100%;
-    text-align: center;
-  }
-  .crisis-sheet h2 {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: 28px;
-    font-weight: 500;
-    font-style: italic;
-    color: var(--crisis);
-    margin-bottom: 14px;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-  }
-  .crisis-sheet p {
-    font-size: 15px;
-    color: var(--charcoal);
-    line-height: 1.65;
-    margin-bottom: 20px;
-    font-weight: 400;
-  }
-  .crisis-sheet .countdown {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: 48px;
-    font-weight: 300;
-    color: var(--crisis);
-    margin: 20px 0;
-    letter-spacing: -0.03em;
-  }
-  .crisis-lines {
-    background: var(--warm-white);
-    border-radius: var(--radius);
-    padding: 16px;
-    margin-bottom: 20px;
-    text-align: left;
-    font-size: 14px;
-    line-height: 1.7;
-    font-weight: 400;
-  }
-  .crisis-lines strong { color: var(--crisis); font-weight: 600; }
-  .crisis-lines p { margin: 0 0 6px; }
-  .crisis-lines p:last-child { margin-bottom: 0; }
-  .crisis-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .crisis-actions button {
-    padding: 16px;
-    border-radius: var(--radius);
-    border: none;
-    font-family: 'Inter', sans-serif;
-    font-size: 15.5px;
-    font-weight: 500;
-    cursor: pointer;
-    min-height: 56px;
-    transition: all 0.2s ease;
-  }
-  .crisis-actions button.call {
-    background: var(--crisis);
-    color: white;
-  }
-  .crisis-actions button.call:hover { background: #8E2D39; }
-  .crisis-actions button.continue {
-    background: transparent;
-    color: var(--muted);
-    border: 1.5px solid var(--soft);
-  }
-  .crisis-actions button.continue:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-
-  /* ── SUMMARY ────────────────────────────────── */
   .report-card {
     background: var(--warm-white);
     border-radius: var(--radius);
@@ -1402,7 +1385,6 @@
     box-shadow: none;
   }
 
-  /* ── TOAST ──────────────────────────────────── */
   .toast {
     position: fixed;
     bottom: 100px;
@@ -1524,7 +1506,6 @@
 <!-- SPLASH — 3 pasos -->
 <div id="splash">
 
-  <!-- PASO 1: Bienvenida -->
   <div class="splash-step active" data-step="1">
     <div class="splash-logo">
       <img src="/icon-192-v4.png" alt="MenteClara">
@@ -1541,7 +1522,6 @@
     </button>
   </div>
 
-  <!-- PASO 2: Nombre -->
   <div class="splash-step" data-step="2">
     <div class="splash-progress">
       <div class="dot active"></div>
@@ -1558,7 +1538,6 @@
     </button>
   </div>
 
-  <!-- PASO 3: Compañero + consentimiento -->
   <div class="splash-step" data-step="3">
     <div class="splash-progress">
       <div class="dot active"></div>
@@ -1804,24 +1783,6 @@
   </div>
 </div>
 
-<!-- CRISIS MODAL -->
-<div id="crisis-modal">
-  <div class="crisis-sheet">
-    <h2 id="crisis-title">Estoy aquí contigo</h2>
-    <p id="crisis-body">Lo que sientes ahora es importante. Por favor, contacta con una línea de ayuda. No tienes que estar solo/a con esto.</p>
-    <div class="countdown" id="crisis-countdown">15</div>
-    <div class="crisis-lines">
-      <p id="crisis-line-1">🇪🇸 024 — España, 24h, gratuito</p>
-      <p id="crisis-line-2">🇺🇸 988 — EE.UU., 24h</p>
-      <p id="crisis-line-3">🌍 findahelpline.com — Internacional</p>
-    </div>
-    <div class="crisis-actions">
-      <button class="call" onclick="window.location.href='tel:024'" id="crisis-call-btn">Llamar ahora</button>
-      <button class="continue" onclick="closeCrisisAndContinue()" id="crisis-continue-btn">He leído, quiero seguir hablando</button>
-    </div>
-  </div>
-</div>
-
 <!-- SUMMARY MODAL -->
 <div class="modal-overlay" id="summary-modal" onclick="closeOnOverlay(event,'summary-modal')">
   <div class="modal-sheet">
@@ -1948,7 +1909,7 @@ const MODELS = [
   { id: 'claude-3-5-haiku', label: 'Claude 3.5 Haiku', tag: 'Alt.' },
 ];
 
-const STORAGE_KEY = 'menteclara_state_v5';
+const STORAGE_KEY = 'menteclara_state_v6';
 
 const MODE_META = {
   listen:    { icon: '👂', es: 'Solo escucha',    en: 'Listen only' },
@@ -1981,7 +1942,6 @@ const state = {
   currentMood: null,
   currentMoodIntensity: null,
   crisisShownThisSession: false,
-  crisisContinue: false,
 };
 
 function escapeHtml(str) {
@@ -2103,13 +2063,11 @@ const TEXTS = {
     ex3Desc: 'Relaja el cuerpo. Recorre cada zona conscientemente.',
     exInhale: 'Inhala', exHold: 'Mantén', exExhale: 'Exhala',
     exPrepare: 'Prepárate...', exDone: '¡Bien hecho!',
-    crisisTitle: 'Estoy aquí contigo',
-    crisisBody: 'Lo que sientes ahora es importante. Por favor, contacta con una línea de ayuda. No tienes que estar solo/a con esto.',
-    crisisLine1: '🇪🇸 024 — España, 24h, gratuito',
-    crisisLine2: '🇺🇸 988 — EE.UU., 24h',
-    crisisLine3: '🌍 findahelpline.com — Internacional',
-    crisisCall: 'Llamar ahora',
-    crisisContinue: 'He leído, quiero seguir hablando',
+    crisisHighTitle: 'Estoy aquí contigo',
+    crisisHighBody: 'Lo que cuentas suena importante. Si en algún momento lo necesitas, estas líneas están abiertas para ti:',
+    crisisHighFooter: 'Puedes seguir hablando conmigo cuando quieras. Esto no bloquea nada.',
+    crisisHighCall: 'Llamar al 024',
+    crisisHighMore: 'Ver más líneas',
     crisisLowCard: 'Si en algún momento la cosa empeora, no dudes en llamar al 024 (España) o 988 (EE.UU.). Estoy aquí para escucharte.',
     crisisMediumCard: 'Lo que cuentas suena importante. Por favor, considera hablar con alguien de confianza o llamar al 024 (España) o 988 (EE.UU.). No tienes que estar solo/a con esto.',
     helpTitle: 'Buscar ayuda profesional',
@@ -2234,13 +2192,11 @@ const TEXTS = {
     ex3Desc: 'Relaxes the body. Move through each area mindfully.',
     exInhale: 'Inhale', exHold: 'Hold', exExhale: 'Exhale',
     exPrepare: 'Get ready...', exDone: 'Well done!',
-    crisisTitle: 'I\'m here with you',
-    crisisBody: 'What you feel right now matters. Please contact a helpline. You don\'t have to be alone with this.',
-    crisisLine1: '🇪🇸 024 — Spain, 24h, free',
-    crisisLine2: '🇺🇸 988 — US, 24h',
-    crisisLine3: '🌍 findahelpline.com — International',
-    crisisCall: 'Call now',
-    crisisContinue: 'I\'ve read it, let me keep talking',
+    crisisHighTitle: 'I\'m here with you',
+    crisisHighBody: 'What you\'re sharing sounds important. If you ever need it, these lines are open for you:',
+    crisisHighFooter: 'You can keep talking to me whenever you want. This doesn\'t block anything.',
+    crisisHighCall: 'Call 988',
+    crisisHighMore: 'See more lines',
     crisisLowCard: 'If things get worse, please call 988 (US) or 024 (Spain). I\'m here to listen.',
     crisisMediumCard: 'What you\'re sharing sounds important. Please consider talking to someone you trust or calling 988 (US) or 024 (Spain). You don\'t have to be alone with this.',
     helpTitle: 'Find professional help',
@@ -2503,7 +2459,7 @@ function exportConversation(format) {
     }, null, 2);
     mime = 'application/json'; ext = 'json';
   } else {
-    const lines = state.history.map(h => {
+    const lines = state.history.filter(h => h.role !== 'system').map(h => {
       const role = h.role === 'user' ? state.userName : companionName;
       return `[${role}]\n${h.content}\n`;
     });
@@ -2931,11 +2887,29 @@ function renderCrisisCard(level) {
   if (level === 'LOW') {
     card.className = 'crisis-card low';
     card.textContent = t.crisisLowCard;
+    area.appendChild(card);
   } else if (level === 'MEDIUM') {
     card.className = 'crisis-card medium';
     card.textContent = t.crisisMediumCard;
+    area.appendChild(card);
+  } else if (level === 'HIGH') {
+    card.className = 'crisis-card high';
+    card.innerHTML = `
+      <h4>🌿 ${escapeHtml(t.crisisHighTitle)}</h4>
+      <p>${escapeHtml(t.crisisHighBody)}</p>
+      <div class="crisis-lines-mini">
+        <p>🇪🇸 <strong>024</strong> — España, 24h, gratuito</p>
+        <p>🇺🇸 <strong>988</strong> — EE.UU., 24h</p>
+        <p>🌍 <a href="https://findahelpline.com" target="_blank" rel="noopener" style="color:var(--crisis)">findahelpline.com</a> — Internacional</p>
+      </div>
+      <div class="crisis-actions-mini">
+        <a class="call" href="tel:024">📞 ${escapeHtml(t.crisisHighCall)}</a>
+        <button class="more" type="button" onclick="openHelp()">${escapeHtml(t.crisisHighMore)}</button>
+      </div>
+      <p class="crisis-footer">${escapeHtml(t.crisisHighFooter)}</p>
+    `;
+    area.appendChild(card);
   }
-  area.appendChild(card);
   area.scrollTop = area.scrollHeight;
 }
 
@@ -3026,7 +3000,7 @@ async function sendMessage() {
     try {
       const level = await classifyCrisis(text);
       if (level === 'HIGH' && !state.crisisShownThisSession) {
-        showCrisisModal();
+        renderCrisisCard('HIGH');
         state.crisisShownThisSession = true;
       } else if (level === 'MEDIUM') {
         renderCrisisCard('MEDIUM');
@@ -3036,7 +3010,7 @@ async function sendMessage() {
     } catch (e) {}
   } else {
     if (detectCrisisKeywords(text) && !state.crisisShownThisSession) {
-      showCrisisModal();
+      renderCrisisCard('HIGH');
       state.crisisShownThisSession = true;
     }
   }
@@ -3085,38 +3059,6 @@ function closeMenu() {
   const btn = document.getElementById('menu-btn');
   if (menu) menu.classList.remove('open');
   if (btn) btn.setAttribute('aria-expanded', 'false');
-}
-
-let crisisCountdownInterval = null;
-function showCrisisModal() {
-  const t = TEXTS[state.lang];
-  document.getElementById('crisis-title').textContent = t.crisisTitle;
-  document.getElementById('crisis-body').textContent = t.crisisBody;
-  document.getElementById('crisis-line-1').textContent = t.crisisLine1;
-  document.getElementById('crisis-line-2').textContent = t.crisisLine2;
-  document.getElementById('crisis-line-3').textContent = t.crisisLine3;
-  document.getElementById('crisis-call-btn').textContent = t.crisisCall;
-  document.getElementById('crisis-continue-btn').textContent = t.crisisContinue;
-  document.getElementById('crisis-modal').classList.add('open');
-  let count = 15;
-  document.getElementById('crisis-countdown').textContent = count;
-  const continueBtn = document.getElementById('crisis-continue-btn');
-  continueBtn.disabled = true;
-  crisisCountdownInterval = setInterval(() => {
-    count--;
-    document.getElementById('crisis-countdown').textContent = count;
-    if (count <= 0) {
-      clearInterval(crisisCountdownInterval);
-      continueBtn.disabled = false;
-    }
-  }, 1000);
-}
-
-function closeCrisisAndContinue() {
-  document.getElementById('crisis-modal').classList.remove('open');
-  if (crisisCountdownInterval) clearInterval(crisisCountdownInterval);
-  state.crisisContinue = true;
-  renderSystemNote(state.lang === 'es' ? 'Sigues en la conversación' : 'Continuing conversation');
 }
 
 function openMood() {
@@ -3694,14 +3636,6 @@ function applyLang() {
   document.getElementById('help-title').textContent = t.helpTitle;
   document.getElementById('help-subtitle').textContent = t.helpSubtitle;
   document.getElementById('help-note').textContent = t.helpNote;
-
-  document.getElementById('crisis-title').textContent = t.crisisTitle;
-  document.getElementById('crisis-body').textContent = t.crisisBody;
-  document.getElementById('crisis-line-1').textContent = t.crisisLine1;
-  document.getElementById('crisis-line-2').textContent = t.crisisLine2;
-  document.getElementById('crisis-line-3').textContent = t.crisisLine3;
-  document.getElementById('crisis-call-btn').textContent = t.crisisCall;
-  document.getElementById('crisis-continue-btn').textContent = t.crisisContinue;
 
   updateModeBadge();
   updateLoginButton();
