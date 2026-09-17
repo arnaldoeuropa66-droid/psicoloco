@@ -17,7 +17,7 @@
 <script src="https://js.puter.com/v2/" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
 
-<link rel="manifest" href="/manifest.json?v=6">
+<link rel="manifest" href="/manifest.json?v=7">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192-v4.png">
 <link rel="icon" type="image/png" sizes="512x512" href="/icon-512-v4.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-v4.png">
@@ -65,6 +65,21 @@
   button, .icon-btn, .setting-chip, .switch, a, .mood-emoji, .exercise-card, .companion-card {
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ── AVATARES 3D ─────────────────────────────── */
+  .avatar-3d {
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    display: block;
+    box-shadow:
+      0 4px 12px rgba(31,27,22,0.18),
+      0 1px 3px rgba(31,27,22,0.12),
+      inset 0 -2px 4px rgba(0,0,0,0.08),
+      inset 0 2px 4px rgba(255,255,255,0.15);
+    background: var(--cream);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
   /* ── SPLASH ─────────────────────────────────── */
@@ -282,18 +297,13 @@
     background: rgba(74,93,78,0.05);
     box-shadow: 0 4px 20px rgba(74,93,78,0.15);
   }
-  .companion-card .c-avatar {
-    width: 56px; height: 56px;
-    background: var(--cream);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 30px;
-    flex-shrink: 0;
-    border: 1.5px solid var(--soft);
-  }
-  .companion-card.selected .c-avatar {
-    border-color: var(--sage);
-    background: var(--warm-white);
+  .companion-card.selected .avatar-3d {
+    transform: scale(1.05);
+    box-shadow:
+      0 6px 20px rgba(74,93,78,0.3),
+      0 2px 6px rgba(31,27,22,0.15),
+      inset 0 -2px 4px rgba(0,0,0,0.08),
+      inset 0 2px 4px rgba(255,255,255,0.15);
   }
   .companion-card .c-info { flex: 1; min-width: 0; }
   .companion-card .c-name {
@@ -360,11 +370,7 @@
   .header-left { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
   .avatar {
     width: 44px; height: 44px;
-    background: var(--cream);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; flex-shrink: 0;
-    border: 1.5px solid var(--soft);
+    flex-shrink: 0;
   }
   .header-info { min-width: 0; flex: 1; }
   .header-info h2 {
@@ -508,17 +514,19 @@
   .msg-avatar {
     width: 36px; height: 36px;
     flex-shrink: 0;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    background: var(--warm-white);
-    border: 1.5px solid var(--soft);
     align-self: flex-end;
   }
-  .msg.user .msg-avatar {
+  .msg-avatar.user-initial {
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    font-weight: 500;
     background: var(--sage);
     color: var(--cream);
-    border-color: var(--sage);
+    box-shadow:
+      0 3px 8px rgba(74,93,78,0.3),
+      inset 0 -2px 4px rgba(0,0,0,0.15),
+      inset 0 2px 4px rgba(255,255,255,0.15);
   }
   .bubble {
     padding: 14px 18px;
@@ -1089,7 +1097,7 @@
     width: 220px;
     height: 220px;
     border-radius: 50%;
-    background: radial-gradient(circle, var(--sage-light) 0%, var(--sage) 100%);
+    background: radial-gradient(circle at 30% 30%, var(--sage-light) 0%, var(--sage) 70%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1098,7 +1106,10 @@
     font-size: 64px;
     font-weight: 300;
     transition: transform 1s ease, opacity 1s ease;
-    box-shadow: 0 16px 48px rgba(74,93,78,0.3);
+    box-shadow:
+      0 16px 48px rgba(74,93,78,0.3),
+      inset 0 -6px 12px rgba(0,0,0,0.15),
+      inset 0 4px 8px rgba(255,255,255,0.15);
     margin-bottom: 32px;
   }
   .ex-circle.inhale { transform: scale(1.2); }
@@ -1475,14 +1486,14 @@
 
     <div class="companion-grid" id="companion-grid">
       <button class="companion-card selected" data-voice="female" type="button">
-        <div class="c-avatar">👩</div>
+        <img class="avatar-3d" src="/avatar-lubna.png" alt="Lubna" width="64" height="64">
         <div class="c-info">
           <div class="c-name">Lubna</div>
           <div class="c-desc">Voz cálida y cercana. Ideal para sentirse acompañado.</div>
         </div>
       </button>
       <button class="companion-card" data-voice="male" type="button">
-        <div class="c-avatar">👴</div>
+        <img class="avatar-3d" src="/avatar-zenon.png" alt="Zenón" width="64" height="64">
         <div class="c-info">
           <div class="c-name">Zenón</div>
           <div class="c-desc">Voz serena y reflexiva. Ideal para pensar con calma.</div>
@@ -1527,7 +1538,7 @@
 
   <div id="app-header">
     <div class="header-left">
-      <div class="avatar" id="main-avatar" aria-hidden="true">👩</div>
+      <img class="avatar-3d avatar" id="main-avatar" src="/avatar-lubna.png" alt="" width="44" height="44">
       <div class="header-info">
         <h2 id="companion-name">Lubna</h2>
         <p><span class="online-dot"></span> <span id="online-txt">En línea</span></p>
@@ -1719,8 +1730,12 @@
     <div class="setting-group">
       <div class="setting-label" id="s-companion-lbl">Compañero de escucha</div>
       <div class="setting-options">
-        <button class="setting-chip" id="chip-female" onclick="setVoice('female')">👩 <span id="chip-female-lbl">Lubna</span></button>
-        <button class="setting-chip" id="chip-male" onclick="setVoice('male')">👴 <span id="chip-male-lbl">Zenón</span></button>
+        <button class="setting-chip" id="chip-female" onclick="setVoice('female')">
+          <img class="avatar-3d" src="/avatar-lubna.png" alt="" width="24" height="24" style="margin-right:6px;"> <span id="chip-female-lbl">Lubna</span>
+        </button>
+        <button class="setting-chip" id="chip-male" onclick="setVoice('male')">
+          <img class="avatar-3d" src="/avatar-zenon.png" alt="" width="24" height="24" style="margin-right:6px;"> <span id="chip-male-lbl">Zenón</span>
+        </button>
       </div>
       <div class="setting-hint" id="companion-hint">Al cambiar, su nombre y voz cambian en toda la app.</div>
     </div>
@@ -1839,7 +1854,7 @@ const TEXTS = {
     placeholder: 'Escribe un mensaje...',
     online: 'En línea',
     companionF: 'Lubna', companionM: 'Zenón',
-    avatarF: '👩', avatarM: '👴',
+    avatarF: '/avatar-lubna.png', avatarM: '/avatar-zenon.png',
     settingsTitle: 'Ajustes',
     companionLbl: 'Compañero de escucha',
     companionHint: 'Al cambiar, su nombre y voz cambian en toda la app.',
@@ -1955,7 +1970,7 @@ const TEXTS = {
     placeholder: 'Type a message...',
     online: 'Online',
     companionF: 'Lubna', companionM: 'Zenón',
-    avatarF: '👩', avatarM: '👴',
+    avatarF: '/avatar-lubna.png', avatarM: '/avatar-zenon.png',
     settingsTitle: 'Settings',
     companionLbl: 'Listening companion',
     companionHint: 'Changing will update name and voice across the app.',
@@ -2494,7 +2509,20 @@ function renderMessage(role, text, animate = true) {
   const avatarEl = document.createElement('div');
   avatarEl.className = 'msg-avatar';
   avatarEl.setAttribute('aria-hidden', 'true');
-  avatarEl.textContent = isAI ? getCompanionAvatar() : (state.userName[0]?.toUpperCase() || '😊');
+  if (isAI) {
+    const img = document.createElement('img');
+    img.className = 'avatar-3d';
+    img.src = getCompanionAvatar();
+    img.alt = '';
+    img.width = 36;
+    img.height = 36;
+    img.style.width = '36px';
+    img.style.height = '36px';
+    avatarEl.appendChild(img);
+  } else {
+    avatarEl.classList.add('user-initial');
+    avatarEl.textContent = state.userName[0]?.toUpperCase() || '😊';
+  }
 
   const bubble = document.createElement('div');
   bubble.className = 'bubble';
@@ -2575,7 +2603,15 @@ function showTyping() {
   const av = document.createElement('div');
   av.className = 'msg-avatar';
   av.setAttribute('aria-hidden','true');
-  av.textContent = getCompanionAvatar();
+  const img = document.createElement('img');
+  img.className = 'avatar-3d';
+  img.src = getCompanionAvatar();
+  img.alt = '';
+  img.width = 36;
+  img.height = 36;
+  img.style.width = '36px';
+  img.style.height = '36px';
+  av.appendChild(img);
   const tb = document.createElement('div');
   tb.className = 'typing-bubble';
   tb.setAttribute('aria-label', 'Escribiendo');
@@ -3211,6 +3247,8 @@ function setLang(l) { state.lang = l; applyLang(); updateSettingsChips(); saveSt
 function setVoice(v) {
   const changed = state.voice !== v;
   state.voice = v;
+  const avatar = document.getElementById('main-avatar');
+  if (avatar) avatar.src = getCompanionAvatar();
   applyLang();
   updateSettingsChips();
   saveState();
@@ -3228,7 +3266,8 @@ function applyLang() {
   document.getElementById('msg-input').placeholder = t.placeholder;
   document.getElementById('online-txt').textContent = t.online;
   document.getElementById('companion-name').textContent = companionName;
-  document.getElementById('main-avatar').textContent = companionAvatar;
+  const mainAvatar = document.getElementById('main-avatar');
+  if (mainAvatar) mainAvatar.src = companionAvatar;
   document.getElementById('lang-toggle-btn').textContent = state.lang.toUpperCase();
 
   document.getElementById('settings-title').textContent = t.settingsTitle;
